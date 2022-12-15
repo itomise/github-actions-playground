@@ -11,9 +11,8 @@ jobs:
     - name: Create comments
       run: |
         cat << EOF > comments
-        1st
-        2nd
-        3rd
+        テストの確認
+        - [ ] これはやった？
         EOF
 
     - name: Post comments
