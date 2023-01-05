@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Create Slack Mention From Github User
-        uses: actions/github-script@v3
+        uses: actions/github-script@v6
         id: create-slack-mention
         with:
           script: |
@@ -28,7 +28,7 @@ jobs:
             return `<@${ slackId }>`
           result-encoding: string
         env:
-          SLACK_GH_USER_MAP: .github/workflows/slack-gh-user-map.json
+          SLACK_GH_USER_MAP: ./.github/workflows/slack-gh-user-map.json
 
       - name: Notify Develop Update
         uses: slackapi/slack-github-action@v1.16.0
