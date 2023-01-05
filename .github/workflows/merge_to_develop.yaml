@@ -1,4 +1,4 @@
-name: comment_on_pr
+name: Merge to develop
 
 on:
   pull_request:
