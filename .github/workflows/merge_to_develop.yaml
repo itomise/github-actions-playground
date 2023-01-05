@@ -20,11 +20,8 @@ jobs:
             const json = {
               "itomise": "USKM59WD7"
             }
-            console.log(json)
-            
-            console.log(${{ github.event }})
-            
-            return 'test'
+            const slackId = json[`${{ github.event.sender.login }}`]
+            return `<@${ slackId }>`
           result-encoding: string
 
       - name: Notify Develop Update
