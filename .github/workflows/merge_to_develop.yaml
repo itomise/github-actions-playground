@@ -22,7 +22,7 @@ jobs:
             }
             console.log(json)
             
-            console.log(github.event)
+            console.log(${{ github.event }})
             
             return 'test'
           result-encoding: string
