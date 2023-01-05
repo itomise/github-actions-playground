@@ -17,6 +17,7 @@ jobs:
         id: create-slack-mention
         with:
           script: |
+            const env = process.env
             const json = JSON.parse(env.SLACK_GH_USER_MAP)
             const slackId = json[`${{ github.event.sender.login }}`]
             return `<@${ slackId }>`
