@@ -22,7 +22,7 @@ jobs:
             }
             console.log(json)
             
-            console.log(github.event.sender)
+            console.log(github.event)
             console.log(slackId)
             return 'test'
           result-encoding: string
