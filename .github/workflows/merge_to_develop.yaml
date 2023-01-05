@@ -13,18 +13,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Create Slack Mention From Github User
-        uses: actions/github-script@v3
+        uses: actions/github-script@v6
         id: create-slack-mention
         with:
           script: |
-            const json1 = require('../slack-gh-user-map.json')
-            console.log(JSON.stringify(json1));
+            import jsonString from '../slack-gh-user-map.json' assert { type: 'json' }
+            console.log(jsonString)
             const json = {
               "itomise": "USKM59WD7"
             }
             const slackId = json[`${{ github.event.sender.login }}`]
             return `<@${ slackId }>`
           result-encoding: string
+        env:
+          SLACK_GH_USER_MAP: ../slack-gh-user-map.json
 
       - name: Notify Develop Update
         uses: slackapi/slack-github-action@v1.16.0
