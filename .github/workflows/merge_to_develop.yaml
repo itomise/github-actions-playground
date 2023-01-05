@@ -20,10 +20,8 @@ jobs:
         id: create-slack-mention
         with:
           script: |
-            console.log(require(process.env.SLACK_GH_USER_MAP))
-            const json = {
-              "itomise": "USKM59WD7"
-            }
+            const data = require(process.env.SLACK_GH_USER_MAP)
+            const json = JSON.parse(data)
             const slackId = json[`${{ github.event.sender.login }}`]
             return `<@${ slackId }>`
           result-encoding: string
