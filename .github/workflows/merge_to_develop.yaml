@@ -12,18 +12,15 @@ jobs:
     # if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
       - name: Create Slack Mention From Github User
-        uses: actions/github-script@v6
+        uses: actions/github-script@v3
         id: create-slack-mention
         with:
           script: |
-            const { promises: fs } = require('fs')
-            fs.readFile(".github/workflows/slack-gh-user-map.json").then(file => {
-                console.log(file);
-            }).catch(err => {
-                console.error(err);
-            });
-            console.log(content)
+            console.log(require("${process.env.SLACK_GH_USER_MAP}}"))
             const json = {
               "itomise": "USKM59WD7"
             }
@@ -31,7 +28,7 @@ jobs:
             return `<@${ slackId }>`
           result-encoding: string
         env:
-          USER_MAP_JSON: ${{ fromJson(steps.load-json.outputs) }}
+          SLACK_GH_USER_MAP: ../slack-gh-user-map.json
 
       - name: Notify Develop Update
         uses: slackapi/slack-github-action@v1.16.0
