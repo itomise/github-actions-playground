@@ -12,31 +12,44 @@ jobs:
     # if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
-    - name: Notify Develop Update
-      uses: slackapi/slack-github-action@v1.16.0
-      with:
-        payload: |
-          {
-            "text": ":github: ビルド結果: ${{ job.status }}\n\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}",
-            "blocks": [
-              {
-                "type": "section",
-                "text": {
-                  "type": "mrkdwn",
-                  "text": ":github: ビルド結果: ${{ job.status }}\n\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
-                }
-              },
-              {
-                "type": "context",
-                "elements": [
-                  {
+      - name: Create Slack Mention From Github User
+        uses: actions/github-script@v3
+        id: create-slack-mention
+        with:
+          script: |
+            const json = {
+              "itomise": "USKM59WD7"
+            }
+            const slackId = json['${ github.event.sender.login }}']
+            return `<@${ slackId }>`
+          result-encoding: string
+
+      - name: Notify Develop Update
+        uses: slackapi/slack-github-action@v1.16.0
+        with:
+          payload: |
+            {
+              "text": ":github: ビルド結果: ${{ job.status }}\n\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
                     "type": "mrkdwn",
-                    "text": "Author: <https://github.com/${{ github.event.sender.login }}|@${{ github.event.sender.login }}>"
+                    "text": ":github: ビルド結果: ${{ job.status }}\n\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
                   }
-                ]
-              }
-            ]
-          }
-      env:
-        SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+                },
+                {
+                  "type": "context",
+                  "elements": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "Author: <https://github.com/${{ github.event.sender.login }}|@${{ github.event.sender.login }}> ${{ env.SENDER_SLACK_MENTION_STRING }} "
+                    }
+                  ]
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SENDER_SLACK_MENTION_STRING: ${{ steps.create-slack-mention.outputs.result }}
