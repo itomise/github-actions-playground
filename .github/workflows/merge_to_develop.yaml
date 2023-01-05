@@ -17,12 +17,12 @@ jobs:
         id: create-slack-mention
         with:
           script: |
-            const json = {
-              "itomise": "USKM59WD7"
-            }
+            const json = JSON.parse(env.SLACK_GH_USER_MAP)
             const slackId = json[`${{ github.event.sender.login }}`]
             return `<@${ slackId }>`
           result-encoding: string
+        env:
+          SLACK_GH_USER_MAP: ../slack-gh-user-map.json
 
       - name: Notify Develop Update
         uses: slackapi/slack-github-action@v1.16.0
