@@ -21,6 +21,9 @@ jobs:
         with:
           script: |
             const data = require(process.env.SLACK_GH_USER_MAP)
+            console.log(data)
+            console.log(JSON.parse("{ "itomise": "test" }"))
+            console.log(data[`${{ github.event.sender.login }}`])
             const json = JSON.parse(data)
             const slackId = json[`${{ github.event.sender.login }}`]
             return `<@${ slackId }>`
