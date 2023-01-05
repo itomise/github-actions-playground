@@ -15,7 +15,7 @@ jobs:
       - name: Load Slack Github User Map
         id: load-json
         run: |
-          JSON=$(cat ../slack-gh-user-map.json)
+          JSON=$(cat ./slack-gh-user-map.json)
           echo "::set-output name=matrix::${JSON//'%'/'%25'}"
 
       - name: Create Slack Mention From Github User
@@ -23,7 +23,7 @@ jobs:
         id: create-slack-mention
         with:
           script: |
-            console.log(process.env.USER_MAP_JSON)
+            // console.log(process.env.USER_MAP_JSON)
             const json = {
               "itomise": "USKM59WD7"
             }
