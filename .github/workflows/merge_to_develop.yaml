@@ -17,7 +17,7 @@ jobs:
         id: create-slack-mention
         with:
           script: |
-            console.log(require('/.github/slack-gh-user-map.json'))
+            console.log(require('../.github/slack-gh-user-map.json'))
             const json = {
               "itomise": "USKM59WD7"
             }
