@@ -28,7 +28,7 @@ jobs:
             return `<@${ slackId }>`
           result-encoding: string
         env:
-          SLACK_GH_USER_MAP: ../slack-gh-user-map.json
+          SLACK_GH_USER_MAP: ./slack-gh-user-map.json
 
       - name: Notify Develop Update
         uses: slackapi/slack-github-action@v1.16.0
