@@ -15,7 +15,7 @@ jobs:
       - name: Load Slack Github User Map
         id: load-json
         run: |
-          JSON=$(cat ${{ github.workspace }}/.github/workflows/slack-gh-user-map.json)
+          JSON=$(cat ${{ github.workspace }}/../.github/workflows/slack-gh-user-map.json)
           echo "::set-output name=matrix::${JSON//'%'/'%25'}"
 
       - name: Create Slack Mention From Github User
