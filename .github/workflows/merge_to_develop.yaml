@@ -27,13 +27,12 @@ jobs:
         id: create-slack-mention
         with:
           script: |
-            console.log(process.env.SLACK_GH_USER_MAP)
-            // const json = require(process.env.SLACK_GH_USER_MAP)
-            // const slackId = json[`${{ github.event.sender.login }}`]
-            // return `<@${ slackId }>`
-          # result-encoding: string
+            const json = process.env.SLACK_GH_USER_MAP
+            const slackId = json[`${{ github.event.sender.login }}`]
+            return `<@${ slackId }>`
+          result-encoding: string
         env:
-          SLACK_GH_USER_MAP: ${{ steps.decrypt-user-map.outputs.result }}
+          SLACK_GH_USER_MAP: ${{ toJSON(steps.decrypt-user-map.outputs.result) }}
 
       # - name: Notify Develop Update
       #   uses: slackapi/slack-github-action@v1.16.0
