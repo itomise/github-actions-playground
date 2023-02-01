@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Decrypt Slack and Github user map file
-        run: echo $(openssl aes-256-cbc -d -in ./.github/workflows/encrypted-slack-gh-user-map.txt -pass pass:${{ env.ENCRYPTION_KEY }})
+        run: openssl aes-256-cbc -d -in ./.github/workflows/encrypted-slack-gh-user-map.txt -pass pass:${{ env.ENCRYPTION_KEY }} >> $GITHUB_OUTPUT
         id: decrypt-user-map
         env:
           ENCRYPTION_KEY: ${{ secrets.ENCRYPTION_KEY }}
