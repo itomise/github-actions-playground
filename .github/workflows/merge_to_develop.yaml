@@ -17,7 +17,7 @@ jobs:
 
       - name: Decrypt Slack and Github user map file
         run: |
-          JSON=`openssl aes-256-cbc -d -in ./encrypted-slack-gh-user-map.txt -pass pass:Vn76Qkag4TwNAYHZ9TnzHZk@4hv.RKBR | tr -d '\n '`
+          JSON=`openssl aes-256-cbc -d -in ./.github/workflows/encrypted-slack-gh-user-map.txt -pass pass:Vn76Qkag4TwNAYHZ9TnzHZk@4hv.RKBR | tr -d '\n '`
           echo "user-map=$JSON" >> $GITHUB_OUTPUT
         id: decrypt-user-map
         env:
