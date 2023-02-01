@@ -15,44 +15,50 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Create Slack Mention From Github User
-        uses: actions/github-script@v6
-        id: create-slack-mention
-        with:
-          script: |
-            const json = require(process.env.SLACK_GH_USER_MAP)
-            const slackId = json[`${{ github.event.sender.login }}`]
-            return `<@${ slackId }>`
-          result-encoding: string
+      - name: Decrypt Slack and Github user map file
+        run:
+          openssl aes-256-cbc -d -in out_sample.txt -out decryption.txt -pass pass:${{ env.ENCRYPTION_KEY }}
         env:
-          SLACK_GH_USER_MAP: ./.github/workflows/slack-gh-user-map.json
+          ENCRYPTION_KEY: ${{ secrets.ENCRYPTION_KEY }}
 
-      - name: Notify Develop Update
-        uses: slackapi/slack-github-action@v1.16.0
-        with:
-          payload: |
-            {
-              "text": ":github: ビルド結果: ${{ job.status }}\n\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}",
-              "blocks": [
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": ":github: ビルド結果: ${{ job.status }}\n\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
-                  }
-                },
-                {
-                  "type": "context",
-                  "elements": [
-                    {
-                      "type": "mrkdwn",
-                      "text": "Author: <https://github.com/${{ github.event.sender.login }}|@${{ github.event.sender.login }}> ${{ env.SENDER_SLACK_MENTION_STRING }} "
-                    }
-                  ]
-                }
-              ]
-            }
-        env:
-          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-          SENDER_SLACK_MENTION_STRING: ${{ steps.create-slack-mention.outputs.result }}
+      # - name: Create Slack Mention From Github User
+      #   uses: actions/github-script@v6
+      #   id: create-slack-mention
+      #   with:
+      #     script: |
+      #       const json = require(process.env.SLACK_GH_USER_MAP)
+      #       const slackId = json[`${{ github.event.sender.login }}`]
+      #       return `<@${ slackId }>`
+      #     result-encoding: string
+      #   env:
+      #     SLACK_GH_USER_MAP: ./.github/workflows/slack-gh-user-map.json
+
+      # - name: Notify Develop Update
+      #   uses: slackapi/slack-github-action@v1.16.0
+      #   with:
+      #     payload: |
+      #       {
+      #         "text": ":github: ビルド結果: ${{ job.status }}\n\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}",
+      #         "blocks": [
+      #           {
+      #             "type": "section",
+      #             "text": {
+      #               "type": "mrkdwn",
+      #               "text": ":github: ビルド結果: ${{ job.status }}\n\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+      #             }
+      #           },
+      #           {
+      #             "type": "context",
+      #             "elements": [
+      #               {
+      #                 "type": "mrkdwn",
+      #                 "text": "Author: <https://github.com/${{ github.event.sender.login }}|@${{ github.event.sender.login }}> ${{ env.SENDER_SLACK_MENTION_STRING }} "
+      #               }
+      #             ]
+      #           }
+      #         ]
+      #       }
+      #   env:
+      #     SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+      #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      #     SENDER_SLACK_MENTION_STRING: ${{ steps.create-slack-mention.outputs.result }}
