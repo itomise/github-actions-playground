@@ -28,7 +28,9 @@ jobs:
         with:
           script: |
             const json = process.env.SLACK_GH_USER_MAP
+            console.log(json)
             const slackId = json[`${{ github.event.sender.login }}`]
+            console.log(slackId)
             return `<@${ slackId }>`
           result-encoding: string
         env:
