@@ -36,7 +36,7 @@ jobs:
           SLACK_GH_USER_MAP: ${{ steps.decrypt-user-map.outputs.user-map-json }}
 
       - name: Notify Develop Update
-        uses: slackapi/slack-github-action@v1.16.0
+        uses: slackapi/slack-github-action@v1.23.0
         with:
           payload: |
             {
