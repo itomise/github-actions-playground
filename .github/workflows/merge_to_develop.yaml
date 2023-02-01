@@ -18,20 +18,22 @@ jobs:
       - name: Decrypt Slack and Github user map file
         run:
           openssl aes-256-cbc -d -in ./.github/workflows/encrypted-slack-gh-user-map.txt -pass pass:${{ env.ENCRYPTION_KEY }}
+        id: decrypt-user-map
         env:
           ENCRYPTION_KEY: ${{ secrets.ENCRYPTION_KEY }}
 
-      # - name: Create Slack Mention From Github User
-      #   uses: actions/github-script@v6
-      #   id: create-slack-mention
-      #   with:
-      #     script: |
-      #       const json = require(process.env.SLACK_GH_USER_MAP)
-      #       const slackId = json[`${{ github.event.sender.login }}`]
-      #       return `<@${ slackId }>`
-      #     result-encoding: string
-      #   env:
-      #     SLACK_GH_USER_MAP: ./.github/workflows/slack-gh-user-map.json
+      - name: Create Slack Mention From Github User
+        uses: actions/github-script@v6
+        id: create-slack-mention
+        with:
+          script: |
+            console.log(process.env.SLACK_GH_USER_MAP)
+            // const json = require(process.env.SLACK_GH_USER_MAP)
+            // const slackId = json[`${{ github.event.sender.login }}`]
+            // return `<@${ slackId }>`
+          result-encoding: string
+        env:
+          SLACK_GH_USER_MAP: ${{ steps.decrypt-user-map }}
 
       # - name: Notify Develop Update
       #   uses: slackapi/slack-github-action@v1.16.0
