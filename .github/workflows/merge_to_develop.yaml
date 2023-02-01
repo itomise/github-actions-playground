@@ -17,7 +17,7 @@ jobs:
 
       - name: Decrypt Slack and Github user map file
         run:
-          openssl aes-256-cbc -d -in out_sample.txt -out decryption.txt -pass pass:${{ env.ENCRYPTION_KEY }}
+          openssl aes-256-cbc -d -in encrypted-slack-gh-user-map.txt -pass pass:${{ env.ENCRYPTION_KEY }}
         env:
           ENCRYPTION_KEY: ${{ secrets.ENCRYPTION_KEY }}
 
