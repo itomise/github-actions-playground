@@ -17,8 +17,8 @@ jobs:
 
       - name: Decrypt Slack and Github user map file
         run: |
-          JSON=`openssl aes-256-cbc -d -in ./.github/workflows/encrypted-slack-gh-user-map.txt -pass pass:Vn76Qkag4TwNAYHZ9TnzHZk@4hv.RKBR | tr -d '\n '`
-          echo "user-map=$JSON" >> $GITHUB_OUTPUT
+          JSON=`openssl aes-256-cbc -d -in ./.github/workflows/encrypted-slack-gh-user-map.txt -pass pass:${{ env.ENCRYPTION_KEY }} | tr -d '\n '`
+          echo "user-map-json=$JSON" >> $GITHUB_OUTPUT
         id: decrypt-user-map
         env:
           ENCRYPTION_KEY: ${{ secrets.ENCRYPTION_KEY }}
@@ -35,7 +35,7 @@ jobs:
             return `<@${ slackId }>`
           result-encoding: string
         env:
-          SLACK_GH_USER_MAP: ${{ toJSON(steps.decrypt-user-map) }}
+          SLACK_GH_USER_MAP: ${{ toJSON(steps.decrypt-user-map.outputs.user-map-json) }}
 
       - name: Notify Develop Update
         uses: slackapi/slack-github-action@v1.16.0
