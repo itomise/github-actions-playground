@@ -68,7 +68,7 @@ jobs:
                   "elements": [
                     {
                       "type": "mrkdwn",
-                      "text": "Author: <${{ github.pull_request.base.owner.html_url }}|@${{ github.pull_request.base.owner.login }}>"
+                      "text": "Author: <${{ github.event.pull_request.user.html_url }}|@${{ github.event.pull_request.user.login }}>"
                     }
                   ]
                 }
