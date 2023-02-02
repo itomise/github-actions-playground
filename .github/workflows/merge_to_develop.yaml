@@ -41,8 +41,14 @@ jobs:
         with:
           payload: |
             {
-              "text": "mainブランチにPRがマージされました。",
               "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "mainブランチにPRがマージされました。"
+                  }
+                },
                 {
                   "type": "section",
                   "text": {
@@ -62,7 +68,7 @@ jobs:
                   "elements": [
                     {
                       "type": "mrkdwn",
-                      "text": "Author: <${{ github.pull_request.user.html_url }}|@${{ github.pull_request.user.login }}>"
+                      "text": "Author: <${{ github.pull_request.base.owner.html_url }}|@${{ github.pull_request.base.owner.login }}>"
                     }
                   ]
                 }
